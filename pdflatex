@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+
+import re
+import subprocess
+import sys
+
+from termcolor import colored
+
+class Highlighter:
+
+	def __init__(self):
+		self.error_rx = re.compile(r'(^[^:]*:\d+: )|(^l\.\d+ )|(^! LaTeX Error: )|$')
+		self.warning_rx = re.compile(r'(LaTeX Warning(:|))|(Package [^\s]+ Warning(:|))|$')
+		self.package_msg_rx = re.compile(r'(Package [^\s]+ Message(:|))|$')
+		self.output_rx = re.compile(r'(^Output written on .*\.pdf \(.*\)\.$)|$')
+
+	def highlight(self, line):
+
+		error = self.error_rx.match(line)
+		if error:
+			print(re.sub(self.error_rx, colored(r'\1', color = 'red'), line))
+			return
+
+		warning = self.warning_rx.match(line)
+		if warning:
+			print(re.sub(self.warning_rx, colored(r'\1', color = 'yellow'), line))
+			return
+
+		package_msg = self.package_msg_rx.match(line)
+		if package_msg:
+			print(re.sub(self.package_msg_rx, colored(r'\1', color = 'cyan'), line))
+			return
+
+		output = self.output_rx.match(line)
+		if output:
+			print(re.sub(self.output_rx, colored(r'\1', color = 'green'), line))
+			return
+
+		if line:
+			print(colored(line, attrs = ['dark']))
+			# print(colored(line, color = 'grey'))
+
+def original_pdflatex():
+	# TODO Discover `pdflatex` in PATH without discovering this wrapper
+	return '/Library/TeX/texbin/pdflatex'
+
+def main():
+	cmd = [
+		original_pdflatex(),
+		'-file-line-error',
+	]
+	cmd.extend(sys.argv[1:])
+
+	environment = {
+		# Increase line length of the original `pdflatex` output
+		'max_print_line': '1000',
+	}
+
+	print(colored(" ".join(cmd), color = 'white', attrs = ['bold']))
+
+	highlighter = Highlighter()
+
+	# Launch original `pdflatex`
+	with subprocess.Popen(
+		cmd,
+		stdout = subprocess.PIPE,
+		stderr = subprocess.STDOUT,
+		bufsize = 1,
+		universal_newlines = True,
+		encoding = 'latin1',
+		env = environment,
+	) as pdflatex:
+		while True:
+			line = pdflatex.stdout.readline()
+			if not line:
+				break
+			highlighter.highlight(line.rstrip())
+		exit(pdflatex.returncode)
+
+if __name__ == '__main__':
+	main()
