@@ -9,10 +9,10 @@ from termcolor import colored
 class Highlighter:
 
 	def __init__(self):
-		self.error_rx = re.compile(r'(^[^:]*:\d+: )|(^l\.\d+ )|(^! LaTeX Error: )|$')
-		self.warning_rx = re.compile(r'(LaTeX Warning(:|))|(Package [^\s]+ Warning(:|))|$')
-		self.package_msg_rx = re.compile(r'(Package [^\s]+ Message(:|))|$')
-		self.output_rx = re.compile(r'(^Output written on .*\.pdf \(.*\)\.$)|$')
+		self.error_rx = re.compile(r'(^[^:]*:\d+: )|(^l\.\d+ )|(^! LaTeX Error: )')
+		self.warning_rx = re.compile(r'(LaTeX Warning(:|))|(Package [^\s]+ Warning(:|))')
+		self.package_msg_rx = re.compile(r'(Package [^\s]+ Message(:|))')
+		self.output_rx = re.compile(r'(^Output written on .*\.pdf \(.*\)\.$)')
 
 	def highlight(self, line):
 
@@ -36,9 +36,7 @@ class Highlighter:
 			print(re.sub(self.output_rx, colored(r'\1', color = 'green'), line))
 			return
 
-		if line:
-			print(colored(line, attrs = ['dark']))
-			# print(colored(line, color = 'grey'))
+		print(colored(line, attrs = ['dark']))
 
 def original_pdflatex():
 	# TODO Discover `pdflatex` in PATH without discovering this wrapper
