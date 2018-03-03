@@ -18,12 +18,12 @@ class Highlighter:
 
 		error = self.error_rx.match(line)
 		if error:
-			print(re.sub(self.error_rx, colored(r'\1', color = 'red'), line))
+			print(re.sub(self.error_rx, colored(r'\1', color = 'red', attrs = ['bold']), line))
 			return
 
 		warning = self.warning_rx.match(line)
 		if warning:
-			print(re.sub(self.warning_rx, colored(r'\1', color = 'yellow'), line))
+			print(re.sub(self.warning_rx, colored(r'\1', color = 'yellow', attrs = ['bold']), line))
 			return
 
 		package_msg = self.package_msg_rx.match(line)
