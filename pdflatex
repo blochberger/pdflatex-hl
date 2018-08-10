@@ -12,7 +12,7 @@ class Highlighter:
 		self.error_rx = re.compile(r'(^[^:]*:\d+: )|(^l\.\d+ )|(^! LaTeX Error: )')
 		self.warning_rx = re.compile(r'(LaTeX Warning(:|))|(Package [^\s]+ Warning(:|))')
 		self.package_msg_rx = re.compile(r'(Package [^\s]+( Message)?(:|))')
-		self.output_rx = re.compile(r'(^Output written on .*\.pdf \(.*\)\.$)')
+		self.output_rx = re.compile(r'^(Output written on .*\.pdf \(.*\)\.)$')
 
 	def highlight(self, line):
 
