@@ -39,7 +39,7 @@ class Highlighter:
 		print(colored(line, attrs = ['dark']))
 
 def original_pdflatex():
-	# TODO Discover `pdflatex` in PATH without discovering this wrapper
+	# TODO Discover `pdflatex` in PATH without discovering this wrapper (#1)
 	return '/Library/TeX/texbin/pdflatex'
 
 def main():

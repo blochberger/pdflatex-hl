@@ -17,4 +17,4 @@ Simply use it as a drop-in replacement for `pdflatex`.
 ## Caveats
 
 - Messages on `stdout` and `stderr` of the original `pdflatex` are merged and everything will be written to `stdout`.
-- The path to the original `pdflatex` is not detected automatically, but still hard-coded in order to avoid calling the wrapper (which probably occurs first in `PATH`). The path currently is `/Library/TeX/texbin/pdflatex` – the default path of `pdflatex` if you are using [MacTeX](https://tug.org/mactex/).
+
